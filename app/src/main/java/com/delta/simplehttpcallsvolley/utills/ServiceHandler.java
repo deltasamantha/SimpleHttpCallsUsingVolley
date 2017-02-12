@@ -30,6 +30,8 @@ public class ServiceHandler extends AbstractServiceHandler {
     private Activity activity;
     private int tag;
 
+    private static final String LOG_TAG = "DELTA";
+
     private ProgressDialog dialog;
 
     public ServiceHandler(Activity activity, String url, int tag) {
@@ -89,7 +91,7 @@ public class ServiceHandler extends AbstractServiceHandler {
             StringRequest deltaRequest = new StringRequest(Request.Method.GET, getUrl(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.d("Delta", response);
+                    Log.d(LOG_TAG, response);
                     if (response.trim().charAt(0) == '{') {
                         try {
                             setJsonResponse(new JSONObject(response.trim()));
@@ -108,10 +110,10 @@ public class ServiceHandler extends AbstractServiceHandler {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("Delta", error.toString());
+                    Log.e(LOG_TAG, error.toString());
                     try {
-                        setJsonResponse(new JSONObject("{ \"success\":false, \"Message\":\"" + getActivity().getString(R.string.ERROR) + "\"}"));
-                    } catch (JSONException e) {
+                        setJsonResponse(getActivity().getString(R.string.ERROR));
+                    } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
                         retrieveData(false);
@@ -122,8 +124,8 @@ public class ServiceHandler extends AbstractServiceHandler {
 
         } else {
             try {
-                setJsonResponse(new JSONObject("{ \"success\":false, \"Message\":\"" + getActivity().getString(R.string.CONNECTION_ERROR) + "\"}"));
-            } catch (JSONException e) {
+                setJsonResponse(getActivity().getString(R.string.CONNECTION_ERROR));
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 retrieveData(false);
@@ -134,8 +136,12 @@ public class ServiceHandler extends AbstractServiceHandler {
 
     private void retrieveData(boolean success) {
         hidepDialog();
-        setSerializedObject(getiSerializer().serializeResponse(getJsonResponse()));
-        (AppFacade.getInstance()).returnResponse(getActivity(),getSerializedObject(),getTag(),success);
+        if (success) {
+            setSerializedObject(getiSerializer().serializeResponse(getJsonResponse()));
+            (AppFacade.getInstance()).returnResponse(getActivity(), getSerializedObject(), getTag(), success);
+        } else {
+            (AppFacade.getInstance()).returnResponse(getActivity(), getJsonResponse(), getTag(), success);
+        }
     }
 
     private void showpDialog() {
@@ -154,6 +160,6 @@ public class ServiceHandler extends AbstractServiceHandler {
     private boolean getNetworkState() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-         return activeNetwork != null && (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE);
+        return activeNetwork != null && (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE);
     }
 }

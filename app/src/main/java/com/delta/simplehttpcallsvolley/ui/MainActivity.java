@@ -14,11 +14,7 @@ import com.delta.simplehttpcallsvolley.R;
 import com.delta.simplehttpcallsvolley.adapters.UserArrayAdapter;
 import com.delta.simplehttpcallsvolley.model.User;
 import com.delta.simplehttpcallsvolley.utills.IResponseResult;
-import com.delta.simplehttpcallsvolley.utills.ServiceHandler;
 import com.delta.simplehttpcallsvolley.utills.UserJsonResponseSerializer;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -46,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else {
             userList = new ArrayList<>();
-            getList();
         }
 
         fab.setOnClickListener(MainActivity.this);
@@ -63,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         listView.invalidateViews();
+
+        getList();
     }
 
     @Override
@@ -89,17 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     adapter.addAll(userList);
                     listView.invalidateViews();
                 } else {
-                    String error = "";
-                    try {
-                        error = ((JSONObject) result).getString("Message");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    showMessage(error);
+                    showMessage((String) result);
                     listView.invalidateViews();
                 }
             } else {
-                showMessage(getString(R.string.ERROR));
+                showMessage((String) result);
                 listView.invalidateViews();
             }
         }
@@ -115,9 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getList() {
-//        ServiceHandler handler = new ServiceHandler(MainActivity.this, getResources().getString(R.string.REF_URL), K_ITEM);
-//        handler.setiSerializer(new UserJsonResponseSerializer());
-//        handler.makeGatRequest();
-        AppFacade.getInstance().initHandler(MainActivity.this, getResources().getString(R.string.REF_URL), K_ITEM,new UserJsonResponseSerializer());
+        AppFacade.getInstance().initHandler(MainActivity.this, getResources().getString(R.string.REF_URL), K_ITEM, new UserJsonResponseSerializer());
     }
 }
