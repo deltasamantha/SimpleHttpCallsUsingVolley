@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="normal">#ffffff</color>
+    <color name="list_text_color">#555555</color>
+    <color name="list_cell_bg">#dcdbe1</color>
+    <color name="list_cell_bg_clocked">#80c8f2</color>
+</resources>

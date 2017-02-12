@@ -1,0 +1,15 @@
+<resources>
+    <!--Reference URL-->
+    <string name="REF_URL">http://api.androidhive.info/contacts/</string>
+
+    <string name="app_name">SimpleHttpCallsVolley</string>
+    <string name="action_settings">Settings</string>
+    <string name="info">Info</string>
+
+    <!--Error Strings-->
+    <string name="CONNECTION_ERROR">Connection Error</string>
+    <string name="ERROR">Error</string>
+
+    <string name="id_label">"Id : "</string>
+    <string name="name_label">"Name : "</string>
+</resources>
